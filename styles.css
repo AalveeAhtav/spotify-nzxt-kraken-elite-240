@@ -31,7 +31,7 @@ body.lcd { width:100vw; height:100vh; overflow:hidden; display:grid; place-items
 }
 .temperatures { position:absolute; top:75%; left:21%; z-index:1; width:58%; display:grid; grid-template-columns:1fr 1px 1fr; align-items:center; text-align:center; }
 .temperatures > div:not(.divider) { white-space:nowrap; }
-.temp-label { display:block; margin-bottom:-1%; color:#b6b4bd; font-size:clamp(11px,2.5vw,16px); font-weight:700; letter-spacing:.18em; }
+.temp-label { display:block; margin-bottom:-1%; color:#ffffff; font-size:clamp(11px,2.5vw,16px); font-weight:700; letter-spacing:.18em; }
 .temperatures strong { font-size:clamp(31px,8.1vw,52px); font-weight:560; font-variant-numeric:tabular-nums; letter-spacing:-.06em; }
 .degree { vertical-align:top; font-size:clamp(14px,3.2vw,21px); color:#b6b4bd; }
 .divider { height:40px; background:rgba(255,255,255,.1); }
@@ -55,4 +55,3 @@ button.secondary { background:#2b2932; } button.danger { background:transparent;
 .status-grid strong,.status-grid code,.status-grid a { color:#e7e5eb; overflow-wrap:anywhere; }
 a { color:#b69bff; } .privacy { margin:22px 0 0; color:#777480; font-size:12px; }
 @media (max-width:520px) { .field-row{flex-direction:column}.status-grid>div{grid-template-columns:1fr}.config{padding:14px} }
-@media (prefers-reduced-motion:reduce) { .marquee.scroll span{animation:none;text-overflow:ellipsis;max-width:100%;overflow:hidden} }
