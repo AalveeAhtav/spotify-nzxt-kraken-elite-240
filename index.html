@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>Kraken Spotify Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="dashboard" class="dashboard" aria-label="Kraken Spotify dashboard">
+    <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+    <header class="clock-block">
+      <time id="clock">--:--</time>
+    </header>
+    <section class="now-playing" aria-live="polite">
+      <div id="artShell" class="art-shell">
+        <img id="albumArt" alt="" hidden>
+        <div id="artFallback" class="art-fallback" aria-hidden="true"><span>♪</span></div>
+      </div>
+      <div class="track-copy">
+        <div id="trackName" class="marquee"><span>Connect Spotify</span></div>
+        <div id="artistName" class="marquee artist"><span>Open setup in CAM</span></div>
+        <div id="albumName" class="marquee album"><span>—</span></div>
+      </div>
+    </section>
+    <section class="temperatures" aria-label="System temperatures">
+      <div><span class="temp-label">CPU</span><strong id="cpuTemp">--</strong><span class="degree">°</span></div>
+      <div class="divider"></div>
+      <div><span class="temp-label">GPU</span><strong id="gpuTemp">--</strong><span class="degree">°</span></div>
+    </section>
+  </main>
+
+  <main id="config" class="config" hidden>
+    <section class="config-card">
+      <div class="eyebrow">NZXT KRAKEN ELITE</div>
+      <h1>Spotify Dashboard</h1>
+      <p class="lede">Connect Spotify once, then use this page's URL in NZXT CAM. Credentials stay in this browser's local storage.</p>
+      <label for="clientId">Spotify Client ID</label>
+      <div class="field-row">
+        <input id="clientId" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="Paste your Client ID">
+        <button id="saveClient" type="button" class="secondary">Save</button>
+      </div>
+      <label for="redirectUri">Redirect URI to register in Spotify</label>
+      <div class="field-row">
+        <input id="redirectUri" type="text" readonly>
+        <button id="copyRedirect" type="button" class="secondary">Copy</button>
+      </div>
+      <div id="authMessage" class="message" role="status"></div>
+      <div class="actions">
+        <button id="connectSpotify" type="button">Connect Spotify</button>
+        <button id="disconnectSpotify" type="button" class="danger" hidden>Disconnect</button>
+      </div>
+      <div class="status-grid">
+        <div><span>Spotify</span><strong id="configSpotifyStatus">Not connected</strong></div>
+        <div><span>Kraken URL</span><code id="krakenUrl"></code></div>
+        <div><span>Browser preview</span><a id="previewLink" href="?preview=1">Open preview</a></div>
+      </div>
+      <p class="privacy">Only <code>user-read-currently-playing</code> is requested. No client secret is used.</p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
