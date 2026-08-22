@@ -12,6 +12,7 @@
   let pollTimer = 0;
   let retryAfter = 0;
   let pollInFlight = false;
+  const marqueeTimers = new Map();
 
   function safeParse(value, fallback = null) { try { return JSON.parse(value) ?? fallback; } catch { return fallback; } }
   function loadTokens() { return safeParse(localStorage.getItem(KEYS.tokens)); }
@@ -67,16 +68,24 @@
   function setMarquee(id, text) {
     const node = $(id); if (!node) return;
     if (node.firstElementChild?.textContent === text) return;
-    node.classList.remove('scroll'); node.style.removeProperty('--scroll-distance'); node.style.removeProperty('--marquee-duration'); node.innerHTML = '';
+    clearInterval(marqueeTimers.get(id)); marqueeTimers.delete(id);
+    node.classList.remove('scroll'); node.innerHTML = '';
     const span = document.createElement('span'); span.textContent = text; node.append(span);
-    requestAnimationFrame(() => {
+    setTimeout(() => {
       const overflow = Math.ceil(span.scrollWidth - node.clientWidth);
       if (overflow > 2) {
-        node.style.setProperty('--scroll-distance', `${overflow}px`);
-        node.style.setProperty('--marquee-duration', `${Math.max(8, overflow / 24 + 6)}s`);
         node.classList.add('scroll');
+        const pauseMs = 1800; const speed = 24; const travelMs = overflow / speed * 1000; const cycleMs = pauseMs * 2 + travelMs; const started = Date.now();
+        const animate = () => {
+          const elapsed = (Date.now() - started) % cycleMs;
+          let offset = 0;
+          if (elapsed > pauseMs && elapsed < pauseMs + travelMs) offset = (elapsed - pauseMs) / travelMs * overflow;
+          else if (elapsed >= pauseMs + travelMs) offset = overflow;
+          span.style.transform = `translate3d(${-offset}px,0,0)`;
+        };
+        animate(); marqueeTimers.set(id, setInterval(animate, 50));
       }
-    });
+    }, 0);
   }
   function renderEmpty(title = 'Nothing playing', subtitle = 'Play something on Spotify') {
     setMarquee('trackName', title); setMarquee('artistName', subtitle); setMarquee('albumName', '—'); $('albumArt').hidden = true; $('albumArt').removeAttribute('src'); $('artFallback').hidden = false; $('coverBackdrop').classList.remove('visible'); $('coverBackdrop').style.backgroundImage = '';

@@ -23,12 +23,7 @@ body.lcd { width:100vw; height:100vh; overflow:hidden; display:grid; place-items
 .marquee { white-space:nowrap; overflow:hidden; font-size:clamp(21px,5.6vw,36px); font-weight:700; line-height:1.18; }
 .marquee.artist,.marquee.album { margin-top:6%; color:#aaa8b4; font-size:clamp(15px,3.6vw,23px); font-weight:500; }
 .marquee.album { color:#777581; }
-.marquee.scroll span { display:inline-block; animation:marquee var(--marquee-duration,10s) linear infinite; will-change:transform; }
-@keyframes marquee {
-  0%,18% { transform:translateX(0); }
-  82%,94% { transform:translateX(calc(-1 * var(--scroll-distance,0px))); }
-  94.01%,100% { transform:translateX(0); }
-}
+.marquee.scroll span { display:inline-block; will-change:transform; }
 .temperatures { position:absolute; top:75%; left:21%; z-index:1; width:58%; display:grid; grid-template-columns:1fr 1px 1fr; align-items:center; text-align:center; }
 .temperatures > div:not(.divider) { white-space:nowrap; }
 .temp-label { display:block; margin-bottom:-1%; color:#ffffff; font-size:clamp(11px,2.5vw,16px); font-weight:700; letter-spacing:.18em; }
