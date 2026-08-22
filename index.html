@@ -5,13 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
   <title>Kraken Spotify Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <main id="dashboard" class="dashboard" aria-label="Kraken Spotify dashboard">
+    <div id="coverBackdrop" class="cover-backdrop" aria-hidden="true"></div>
     <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
     <header class="clock-block">
-      <time id="clock">--:--</time>
+      <time id="clock"><span id="clockTime">--:--</span><span id="clockPeriod" class="clock-period">--</span></time>
     </header>
     <section class="now-playing" aria-live="polite">
       <div id="artShell" class="art-shell">

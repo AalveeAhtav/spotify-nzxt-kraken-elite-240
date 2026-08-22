@@ -66,7 +66,7 @@
   function message(text, error = false) { const node = $('authMessage'); if (!node) return; node.textContent = text; node.classList.toggle('error', error); }
   function setMarquee(id, text) { const node = $(id); if (!node) return; node.classList.remove('scroll'); node.innerHTML = ''; const span = document.createElement('span'); span.textContent = text; node.append(span); requestAnimationFrame(() => node.classList.toggle('scroll', span.scrollWidth > node.clientWidth + 2)); }
   function renderEmpty(title = 'Nothing playing', subtitle = 'Play something on Spotify') {
-    setMarquee('trackName', title); setMarquee('artistName', subtitle); setMarquee('albumName', '—'); $('albumArt').hidden = true; $('albumArt').removeAttribute('src'); $('artFallback').hidden = false;
+    setMarquee('trackName', title); setMarquee('artistName', subtitle); setMarquee('albumName', '—'); $('albumArt').hidden = true; $('albumArt').removeAttribute('src'); $('artFallback').hidden = false; $('coverBackdrop').classList.remove('visible'); $('coverBackdrop').style.backgroundImage = '';
   }
   function renderPlaying(item, playing) {
     const isEpisode = item.type === 'episode';
@@ -76,7 +76,7 @@
     const images = isEpisode ? item.images : item.album?.images; const image = images?.find(i => i?.url)?.url;
     setMarquee('trackName', title); setMarquee('artistName', artists); setMarquee('albumName', album);
     $('albumArt').hidden = !image; $('artFallback').hidden = Boolean(image);
-    if (image && $('albumArt').src !== image) $('albumArt').src = image;
+    if (image && $('albumArt').src !== image) { $('albumArt').src = image; $('coverBackdrop').style.backgroundImage = `url("${image.replace(/"/g, '%22')}")`; $('coverBackdrop').classList.add('visible'); }
   }
   async function pollNowPlaying() {
     if (pollInFlight) return;
@@ -124,7 +124,12 @@
     window.nzxt.v1.onMonitoringDataUpdate = monitoringUpdate;
     if (isPreview) { let tick = 0; monitoringUpdate({ cpus:[{temperature:47}], gpus:[{temperature:43,isActive:true,isDiscrete:true}] }); setInterval(() => { tick += .2; monitoringUpdate({ cpus:[{temperature:48 + Math.sin(tick)*4}], gpus:[{temperature:43 + Math.cos(tick*.8)*3,isActive:true,isDiscrete:true}] }); }, 2000); }
   }
-  function tickClock() { const now = new Date(); setText('clock', new Intl.DateTimeFormat(undefined,{hour:'2-digit',minute:'2-digit',hour12:false}).format(now)); }
+  function tickClock() {
+    const parts = new Intl.DateTimeFormat(undefined,{hour:'numeric',minute:'2-digit',hour12:true}).formatToParts(new Date());
+    const value = type => parts.find(part => part.type === type)?.value || '';
+    setText('clockTime', `${value('hour')}:${value('minute')}`);
+    setText('clockPeriod', value('dayPeriod').toUpperCase());
+  }
   function setupConfig() {
     $('dashboard').hidden = true; $('config').hidden = false; $('clientId').value = localStorage.getItem(KEYS.clientId) || ''; $('redirectUri').value = redirectUri;
     $('krakenUrl').textContent = `${redirectUri}?kraken=1`; $('previewLink').href = `${redirectUri}?preview=1`;
@@ -138,7 +143,7 @@
   }
   function setupDisplay() {
     document.body.classList.add('lcd'); $('config').hidden = true; $('dashboard').hidden = false; tickClock(); setInterval(tickClock,1000); installMonitoring(); pollNowPlaying();
-    $('albumArt').addEventListener('error', () => { $('albumArt').hidden = true; $('artFallback').hidden = false; });
+    $('albumArt').addEventListener('error', () => { $('albumArt').hidden = true; $('artFallback').hidden = false; $('coverBackdrop').classList.remove('visible'); $('coverBackdrop').style.backgroundImage = ''; });
     window.addEventListener('storage', e => { if ([KEYS.tokens,KEYS.clientId].includes(e.key)) pollNowPlaying(); });
     window.addEventListener('online', pollNowPlaying);
   }
