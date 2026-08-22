@@ -14,22 +14,26 @@ body.lcd { width:100vw; height:100vh; overflow:hidden; display:grid; place-items
 .clock-block { position:absolute; top:10%; z-index:1; width:100%; text-align:center; }
 #clock { display:block; font-size:clamp(34px,9.4vw,60px); font-weight:650; line-height:1; letter-spacing:-.055em; font-variant-numeric:tabular-nums; }
 .clock-period { margin-left:.24em; color:#aaa8b4; font-size:.28em; font-weight:650; letter-spacing:.08em; vertical-align:.32em; }
-.now-playing { position:absolute; top:26%; left:10%; z-index:1; width:80%; display:grid; grid-template-columns:48% 1fr; gap:6%; align-items:center; text-align:left; }
+.now-playing { position:absolute; top:27.5%; left:11%; z-index:1; width:78%; display:grid; grid-template-columns:43% 1fr; gap:6%; align-items:center; text-align:left; }
 .art-shell { position:relative; width:100%; aspect-ratio:1; overflow:hidden; border-radius:8%; background:#14131a; box-shadow:0 20px 55px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.09); }
 #albumArt { width:100%; height:100%; object-fit:cover; }
 .art-fallback { width:100%; height:100%; display:grid; place-items:center; background:linear-gradient(145deg,#282336,#111116); color:#8e6eff; font-size:clamp(44px,13vw,82px); }
 .art-fallback span { transform:translateY(-3%); }
 .track-copy { min-width:0; overflow:hidden; }
-.marquee { white-space:nowrap; overflow:hidden; font-size:clamp(18px,4.8vw,31px); font-weight:700; line-height:1.22; }
-.marquee.artist,.marquee.album { margin-top:6%; color:#aaa8b4; font-size:clamp(12px,3vw,19px); font-weight:500; }
+.marquee { white-space:nowrap; overflow:hidden; font-size:clamp(21px,5.6vw,36px); font-weight:700; line-height:1.18; }
+.marquee.artist,.marquee.album { margin-top:6%; color:#aaa8b4; font-size:clamp(15px,3.6vw,23px); font-weight:500; }
 .marquee.album { color:#777581; }
-.marquee.scroll span { display:inline-block; padding-left:100%; animation:marquee 12s linear infinite; }
-@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-100%)} }
+.marquee.scroll span { display:inline-block; animation:marquee var(--marquee-duration,10s) linear infinite; will-change:transform; }
+@keyframes marquee {
+  0%,18% { transform:translateX(0); }
+  82%,94% { transform:translateX(calc(-1 * var(--scroll-distance,0px))); }
+  94.01%,100% { transform:translateX(0); }
+}
 .temperatures { position:absolute; top:75%; left:21%; z-index:1; width:58%; display:grid; grid-template-columns:1fr 1px 1fr; align-items:center; text-align:center; }
 .temperatures > div:not(.divider) { white-space:nowrap; }
-.temp-label { display:block; margin-bottom:-1%; color:#85828e; font-size:clamp(9px,2vw,13px); font-weight:700; letter-spacing:.18em; }
-.temperatures strong { font-size:clamp(26px,7vw,45px); font-weight:560; font-variant-numeric:tabular-nums; letter-spacing:-.06em; }
-.degree { vertical-align:top; font-size:clamp(12px,2.8vw,18px); color:#b6b4bd; }
+.temp-label { display:block; margin-bottom:-1%; color:#b6b4bd; font-size:clamp(11px,2.5vw,16px); font-weight:700; letter-spacing:.18em; }
+.temperatures strong { font-size:clamp(31px,8.1vw,52px); font-weight:560; font-variant-numeric:tabular-nums; letter-spacing:-.06em; }
+.degree { vertical-align:top; font-size:clamp(14px,3.2vw,21px); color:#b6b4bd; }
 .divider { height:40px; background:rgba(255,255,255,.1); }
 .config { min-height:100vh; display:grid; place-items:center; padding:28px; background:radial-gradient(circle at 20% 10%,rgba(124,77,255,.18),transparent 38%),radial-gradient(circle at 85% 80%,rgba(22,214,189,.12),transparent 35%),#08080b; }
 .config-card { width:min(720px,100%); padding:clamp(25px,5vw,48px); border:1px solid #282630; border-radius:24px; background:rgba(17,16,22,.9); box-shadow:0 30px 80px rgba(0,0,0,.35); }
@@ -51,4 +55,4 @@ button.secondary { background:#2b2932; } button.danger { background:transparent;
 .status-grid strong,.status-grid code,.status-grid a { color:#e7e5eb; overflow-wrap:anywhere; }
 a { color:#b69bff; } .privacy { margin:22px 0 0; color:#777480; font-size:12px; }
 @media (max-width:520px) { .field-row{flex-direction:column}.status-grid>div{grid-template-columns:1fr}.config{padding:14px} }
-@media (prefers-reduced-motion:reduce) { .marquee.scroll span{animation:none;padding-left:0;text-overflow:ellipsis;max-width:100%;overflow:hidden} }
+@media (prefers-reduced-motion:reduce) { .marquee.scroll span{animation:none;text-overflow:ellipsis;max-width:100%;overflow:hidden} }

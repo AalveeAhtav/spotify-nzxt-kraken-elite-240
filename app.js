@@ -64,7 +64,20 @@
 
   function setText(id, value) { const node = $(id); if (node) node.textContent = value; }
   function message(text, error = false) { const node = $('authMessage'); if (!node) return; node.textContent = text; node.classList.toggle('error', error); }
-  function setMarquee(id, text) { const node = $(id); if (!node) return; node.classList.remove('scroll'); node.innerHTML = ''; const span = document.createElement('span'); span.textContent = text; node.append(span); requestAnimationFrame(() => node.classList.toggle('scroll', span.scrollWidth > node.clientWidth + 2)); }
+  function setMarquee(id, text) {
+    const node = $(id); if (!node) return;
+    if (node.firstElementChild?.textContent === text) return;
+    node.classList.remove('scroll'); node.style.removeProperty('--scroll-distance'); node.style.removeProperty('--marquee-duration'); node.innerHTML = '';
+    const span = document.createElement('span'); span.textContent = text; node.append(span);
+    requestAnimationFrame(() => {
+      const overflow = Math.ceil(span.scrollWidth - node.clientWidth);
+      if (overflow > 2) {
+        node.style.setProperty('--scroll-distance', `${overflow}px`);
+        node.style.setProperty('--marquee-duration', `${Math.max(8, overflow / 24 + 6)}s`);
+        node.classList.add('scroll');
+      }
+    });
+  }
   function renderEmpty(title = 'Nothing playing', subtitle = 'Play something on Spotify') {
     setMarquee('trackName', title); setMarquee('artistName', subtitle); setMarquee('albumName', '—'); $('albumArt').hidden = true; $('albumArt').removeAttribute('src'); $('artFallback').hidden = false; $('coverBackdrop').classList.remove('visible'); $('coverBackdrop').style.backgroundImage = '';
   }
